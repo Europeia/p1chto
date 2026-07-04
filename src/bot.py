@@ -17,7 +17,8 @@ class Bot(commands.Bot):
         intents = discord.Intents.default()
         intents.members = True
 
-        super().__init__(command_prefix=".", intents=intents)
+        super().__init__(command_prefix=".", intents=intents,
+                         allowed_mentions=discord.AllowedMentions(everyone=False, roles=False, users=True))
 
     async def on_ready(self):
         logger.info(f"Logged in as {self.user}")
@@ -26,5 +27,4 @@ class Bot(commands.Bot):
         self._welcome_channel = await self.fetch_channel(self._welcome_channel_id)
 
     async def on_member_join(self, member: discord.Member):
-        await self._welcome_channel.send(self._welcome_message.substitute(member_id=member.id),
-                                         allowed_mentions=discord.AllowedMentions.none())
+        await self._welcome_channel.send(self._welcome_message.substitute(member_id=member.id))
